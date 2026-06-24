@@ -1,0 +1,345 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Calculadora de distancia entre dos puntos</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: Arial, sans-serif;
+      font-size: 14px;
+      color: #222;
+      background: #fff;
+      padding: 20px 30px;
+    }
+
+    h2 {
+      font-size: 15px;
+      font-weight: bold;
+      margin-bottom: 6px;
+    }
+
+    p {
+      margin-bottom: 14px;
+      line-height: 1.5;
+    }
+
+    .intro-img {
+      text-align: center;
+      margin: 20px 0;
+    }
+
+    /* ---- CALCULATOR BOX ---- */
+    .calc-wrapper {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+      border: 1px solid #ccc;
+      background: #f5f5f5;
+      padding: 16px 20px;
+      width: fit-content;
+      margin-bottom: 20px;
+    }
+
+    .form-section label {
+      display: block;
+      margin-bottom: 8px;
+      font-size: 13px;
+    }
+
+    .form-section select {
+      font-size: 13px;
+      padding: 1px 4px;
+    }
+
+    .coords-grid {
+      margin-top: 10px;
+      font-size: 13px;
+    }
+
+    .coords-grid .point-row {
+      display: flex;
+      align-items: center;
+      margin-bottom: 6px;
+      gap: 2px;
+    }
+
+    .coords-grid input[type="number"] {
+      width: 55px;
+      text-align: center;
+      font-size: 13px;
+      border: 1px solid #aaa;
+      padding: 2px 4px;
+    }
+
+    .coords-grid span {
+      font-size: 13px;
+    }
+
+    /* ---- CANVAS ---- */
+    .canvas-box {
+      background: #ddd;
+      border: 1px solid #aaa;
+      width: 160px;
+      height: 120px;
+      position: relative;
+      flex-shrink: 0;
+    }
+
+    .canvas-box canvas {
+      width: 100%;
+      height: 100%;
+    }
+
+    /* ---- BUTTON ---- */
+    .btn-row {
+      text-align: center;
+      margin-top: 14px;
+    }
+
+    button {
+      font-size: 13px;
+      padding: 4px 14px;
+      cursor: pointer;
+      background: #f0f0f0;
+      border: 1px solid #999;
+    }
+
+    button:hover { background: #e0e0e0; }
+
+    /* ---- RESULT ---- */
+    .result-box {
+      display: none;
+      border: 2px solid #6aaa4a;
+      background: #e8f5e0;
+      padding: 14px 20px;
+      margin-top: 10px;
+      width: fit-content;
+      min-width: 340px;
+    }
+
+    .result-box .result-title {
+      background: #6aaa4a;
+      color: #fff;
+      font-weight: bold;
+      padding: 4px 10px;
+      margin: -14px -20px 14px -20px;
+      font-size: 14px;
+    }
+
+    .result-value {
+      text-align: center;
+      font-weight: bold;
+      font-size: 15px;
+      letter-spacing: 1px;
+    }
+
+    /* ---- FORMULAS SECTION ---- */
+    .formulas {
+      margin-top: 30px;
+      line-height: 1.8;
+    }
+
+    .formula-block {
+      margin-bottom: 20px;
+      font-size: 14px;
+    }
+
+    .formula-block p {
+      margin-bottom: 4px;
+    }
+
+    .formula-display {
+      font-family: 'Times New Roman', serif;
+      font-size: 15px;
+      background: #f9f9f9;
+      border: 1px solid #ddd;
+      display: inline-block;
+      padding: 6px 14px;
+      margin-top: 4px;
+    }
+
+    .example-calc {
+      margin-top: 10px;
+      background: #fff;
+      border: 1px solid #ccc;
+      padding: 10px 16px;
+      display: inline-block;
+      font-family: 'Times New Roman', serif;
+      font-size: 14px;
+      line-height: 2;
+    }
+
+    .example-calc .highlighted {
+      border: 2px solid #333;
+      padding: 2px 6px;
+      font-weight: bold;
+    }
+  </style>
+</head>
+<body>
+
+  <p>Calculadora de distancia entre dos puntos.</p>
+
+  <p><strong>Distancia entre dos puntos</strong> - es la longitud del segmento que conecta estos puntos.</p>
+
+  <!-- Static intro diagram -->
+  <div class="intro-img">
+    <svg width="260" height="130" xmlns="http://www.w3.org/2000/svg">
+      <line x1="60" y1="100" x2="200" y2="30" stroke="#000" stroke-width="2.5"/>
+      <circle cx="200" cy="30" r="5" fill="#000"/>
+      <circle cx="60" cy="100" r="5" fill="#000"/>
+      <text x="207" y="28" font-size="14" font-family="Arial">A</text>
+      <text x="35" y="108" font-size="14" font-family="Arial">B</text>
+      <!-- dotted arc near A -->
+      <path d="M192,22 Q205,18 210,30" stroke="#555" stroke-width="1.2" fill="none" stroke-dasharray="2,2"/>
+    </svg>
+  </div>
+
+  <p>Dependiendo de la dimensión del problema de la distancia entre dos puntos se puede encontrar con la siguiente fórmula:</p>
+
+  <!-- CALCULATOR -->
+  <div class="calc-wrapper">
+    <div class="form-section">
+      <label>Elija la dimensionalidad necesaria:</label>
+      <label>Dimensionalidad:
+        <select id="dimSelect" onchange="onDimChange()">
+          <option value="2">2</option>
+          <option value="3">3</option>
+        </select>
+      </label>
+      <div class="coords-grid" style="margin-top:10px;">
+        <p style="margin-bottom:6px; font-size:13px;">Introduzca las coordenadas de puntos.</p>
+        <div class="point-row">
+          <span>A: (</span>
+          <input type="number" id="ax" value="0"/>
+          <span>,</span>
+          <input type="number" id="ay" value="0"/>
+          <span id="az-wrap" style="display:none;">,<input type="number" id="az" value="0"/></span>
+          <span>)</span>
+        </div>
+        <div class="point-row">
+          <span>B: (</span>
+          <input type="number" id="bx" value="0"/>
+          <span>,</span>
+          <input type="number" id="by" value="0"/>
+          <span id="bz-wrap" style="display:none;">,<input type="number" id="bz" value="0"/></span>
+          <span>)</span>
+        </div>
+      </div>
+      <div class="btn-row">
+        <button onclick="calculate()">Calcular longitud del segmento AB</button>
+      </div>
+    </div>
+
+    <!-- Mini diagram -->
+    <div class="canvas-box">
+      <canvas id="segCanvas" width="160" height="120"></canvas>
+    </div>
+  </div>
+
+  <!-- RESULT -->
+  <div class="result-box" id="resultBox">
+    <div class="result-title">Resultado:</div>
+    <div class="result-value" id="resultValue">XXXXXXXXX</div>
+  </div>
+
+  <!-- FORMULAS -->
+  <div class="formulas">
+    <div class="formula-block">
+      <p>La fórmula para calcular la distancia entre dos puntos A(x<sub>a</sub>, y<sub>a</sub>) y B(x<sub>b</sub>, y<sub>b</sub>) en plano (dos dimensiones):</p>
+      <div class="formula-display">
+        AB = √(x<sub>b</sub> − x<sub>a</sub>)<sup>2</sup> + (y<sub>b</sub> − y<sub>a</sub>)<sup>2</sup>
+      </div>
+    </div>
+
+    <div class="formula-block">
+      <p>La fórmula para calcular la distancia entre dos puntos A(x<sub>a</sub>, y<sub>a</sub>, z<sub>a</sub>) y B(x<sub>b</sub>, y<sub>b</sub>, z<sub>b</sub>) en espacio (tres dimensiones):</p>
+      <div class="formula-display">
+        AB = √(x<sub>b</sub> − x<sub>a</sub>)<sup>2</sup> + (y<sub>b</sub> − y<sub>a</sub>)<sup>2</sup> + (z<sub>b</sub> − z<sub>a</sub>)<sup>2</sup>
+      </div>
+    </div>
+
+    <!-- Example calculation shown statically -->
+    <div class="example-calc">
+      <em>d</em> = √(x<sub>b</sub> − x<sub>a</sub>)<sup>2</sup> + (y<sub>b</sub> − y<sub>a</sub>)<sup>2</sup> =<br/>
+      = √(3 − 1)<sup>2</sup> + (4 − 2)<sup>2</sup> =<br/>
+      = √2<sup>2</sup> + 2<sup>2</sup> = √4 + 4 =<br/>
+      = √8 = <span class="highlighted">2.8284271247461903</span>
+    </div>
+  </div>
+
+  <script>
+    function onDimChange() {
+      var dim = parseInt(document.getElementById('dimSelect').value);
+      document.getElementById('az-wrap').style.display = dim === 3 ? 'inline' : 'none';
+      document.getElementById('bz-wrap').style.display = dim === 3 ? 'inline' : 'none';
+      document.getElementById('resultBox').style.display = 'none';
+      drawSegment();
+    }
+
+    function calculate() {
+      var dim = parseInt(document.getElementById('dimSelect').value);
+      var ax = parseFloat(document.getElementById('ax').value) || 0;
+      var ay = parseFloat(document.getElementById('ay').value) || 0;
+      var bx = parseFloat(document.getElementById('bx').value) || 0;
+      var by = parseFloat(document.getElementById('by').value) || 0;
+
+      var dist;
+      if (dim === 2) {
+        dist = Math.sqrt(Math.pow(bx - ax, 2) + Math.pow(by - ay, 2));
+      } else {
+        var az = parseFloat(document.getElementById('az').value) || 0;
+        var bz = parseFloat(document.getElementById('bz').value) || 0;
+        dist = Math.sqrt(Math.pow(bx - ax, 2) + Math.pow(by - ay, 2) + Math.pow(bz - az, 2));
+      }
+
+      var box = document.getElementById('resultBox');
+      box.style.display = 'block';
+      document.getElementById('resultValue').textContent = dist;
+
+      drawSegment();
+    }
+
+    function drawSegment() {
+      var canvas = document.getElementById('segCanvas');
+      var ctx = canvas.getContext('2d');
+      var W = canvas.width, H = canvas.height;
+
+      ctx.clearRect(0, 0, W, H);
+
+      // Fixed positions for A (top-right) and B (bottom-left)
+      var ax = W * 0.75, ay = H * 0.15;
+      var bx = W * 0.15, by = H * 0.82;
+
+      // Draw segment
+      ctx.beginPath();
+      ctx.moveTo(bx, by);
+      ctx.lineTo(ax, ay);
+      ctx.strokeStyle = '#000';
+      ctx.lineWidth = 2;
+      ctx.stroke();
+
+      // Dots
+      ctx.beginPath();
+      ctx.arc(ax, ay, 5, 0, Math.PI * 2);
+      ctx.fillStyle = '#000';
+      ctx.fill();
+
+      ctx.beginPath();
+      ctx.arc(bx, by, 5, 0, Math.PI * 2);
+      ctx.fill();
+
+      // Labels
+      ctx.font = '13px Arial';
+      ctx.fillText('A', ax + 7, ay + 4);
+      ctx.fillText('B', bx - 18, by + 4);
+    }
+
+    // Init
+    drawSegment();
+  </script>
+</body>
+</html>
