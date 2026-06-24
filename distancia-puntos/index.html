@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Calculadora de distancia entre dos puntos</title>
+  <link rel="stylesheet" href="styles.css"/>
+</head>
+<body>
+
+  <p>Calculadora de distancia entre dos puntos.</p>
+
+  <p><strong>Distancia entre dos puntos</strong> - es la longitud del segmento que conecta estos puntos.</p>
+
+  <div class="intro-img">
+    <svg width="260" height="130" xmlns="http://www.w3.org/2000/svg">
+      <line x1="60" y1="100" x2="200" y2="30" stroke="#000" stroke-width="2.5"/>
+      <circle cx="200" cy="30" r="5" fill="#000"/>
+      <circle cx="60" cy="100" r="5" fill="#000"/>
+      <text x="207" y="28" font-size="14" font-family="Arial">A</text>
+      <text x="35" y="108" font-size="14" font-family="Arial">B</text>
+      <path d="M192,22 Q205,18 210,30" stroke="#555" stroke-width="1.2" fill="none" stroke-dasharray="2,2"/>
+    </svg>
+  </div>
+
+  <p>Dependiendo de la dimensión del problema de la distancia entre dos puntos se puede encontrar con la siguiente fórmula:</p>
+
+  <!-- CALCULADORA 2D -->
+  <h3 class="calc-title">2 dimensiones</h3>
+  <div class="calc-wrapper">
+    <div class="form-section">
+      <p class="coords-label">Introduzca las coordenadas de puntos.</p>
+      <div class="coords-grid">
+        <div class="point-row">
+          <span>A: (</span>
+          <input type="number" id="ax2" placeholder="x"/>
+          <span>,</span>
+          <input type="number" id="ay2" placeholder="y"/>
+          <span>)</span>
+        </div>
+        <div class="point-row">
+          <span>B: (</span>
+          <input type="number" id="bx2" placeholder="x"/>
+          <span>,</span>
+          <input type="number" id="by2" placeholder="y"/>
+          <span>)</span>
+        </div>
+      </div>
+      <div class="btn-row">
+        <button onclick="calculate2D()">Calcular longitud del segmento AB</button>
+      </div>
+    </div>
+    <div class="canvas-box">
+      <canvas id="canvas2D" width="160" height="120"></canvas>
+    </div>
+  </div>
+  <div class="error-box" id="errorBox2D">
+    <div class="error-title">Error en los datos ingresados:</div>
+    <ul id="errorList2D"></ul>
+  </div>
+  <div class="result-box" id="resultBox2D">
+    <div class="result-title">Resultado:</div>
+    <div class="result-value" id="resultValue2D"></div>
+  </div>
+
+  <!-- CALCULADORA 3D -->
+  <h3 class="calc-title" style="margin-top:30px;">3 dimensiones</h3>
+  <div class="calc-wrapper">
+    <div class="form-section">
+      <p class="coords-label">Introduzca las coordenadas de puntos.</p>
+      <div class="coords-grid">
+        <div class="point-row">
+          <span>A: (</span>
+          <input type="number" id="ax3" placeholder="x"/>
+          <span>,</span>
+          <input type="number" id="ay3" placeholder="y"/>
+          <span>,</span>
+          <input type="number" id="az3" placeholder="z"/>
+          <span>)</span>
+        </div>
+        <div class="point-row">
+          <span>B: (</span>
+          <input type="number" id="bx3" placeholder="x"/>
+          <span>,</span>
+          <input type="number" id="by3" placeholder="y"/>
+          <span>,</span>
+          <input type="number" id="bz3" placeholder="z"/>
+          <span>)</span>
+        </div>
+      </div>
+      <div class="btn-row">
+        <button onclick="calculate3D()">Calcular longitud del segmento AB</button>
+      </div>
+    </div>
+    <div class="canvas-box">
+      <canvas id="canvas3D" width="160" height="120"></canvas>
+    </div>
+  </div>
+  <div class="error-box" id="errorBox3D">
+    <div class="error-title">Error en los datos ingresados:</div>
+    <ul id="errorList3D"></ul>
+  </div>
+  <div class="result-box" id="resultBox3D">
+    <div class="result-title">Resultado:</div>
+    <div class="result-value" id="resultValue3D"></div>
+  </div>
+
+  <!-- FORMULAS -->
+  <div class="formulas">
+    <div class="formula-block">
+      <p>La fórmula para calcular la distancia entre dos puntos A(x<sub>a</sub>, y<sub>a</sub>) y B(x<sub>b</sub>, y<sub>b</sub>) en plano (dos dimensiones):</p>
+      <div class="formula-display">
+        AB = √(x<sub>b</sub> − x<sub>a</sub>)<sup>2</sup> + (y<sub>b</sub> − y<sub>a</sub>)<sup>2</sup>
+      </div>
+    </div>
+
+    <div class="formula-block">
+      <p>La fórmula para calcular la distancia entre dos puntos A(x<sub>a</sub>, y<sub>a</sub>, z<sub>a</sub>) y B(x<sub>b</sub>, y<sub>b</sub>, z<sub>b</sub>) en espacio (tres dimensiones):</p>
+      <div class="formula-display">
+        AB = √(x<sub>b</sub> − x<sub>a</sub>)<sup>2</sup> + (y<sub>b</sub> − y<sub>a</sub>)<sup>2</sup> + (z<sub>b</sub> − z<sub>a</sub>)<sup>2</sup>
+      </div>
+    </div>
+
+    <div class="example-calc">
+      <em>d</em> = √(x<sub>b</sub> − x<sub>a</sub>)<sup>2</sup> + (y<sub>b</sub> − y<sub>a</sub>)<sup>2</sup> =<br/>
+      = √(3 − 1)<sup>2</sup> + (4 − 2)<sup>2</sup> =<br/>
+      = √2<sup>2</sup> + 2<sup>2</sup> = √4 + 4 =<br/>
+      = √8 = <span class="highlighted">2.8284271247461903</span>
+    </div>
+
+    <br/><br/>
+
+    <div class="example-calc">
+      <em>d</em> = √(x<sub>b</sub> − x<sub>a</sub>)<sup>2</sup> + (y<sub>b</sub> − y<sub>a</sub>)<sup>2</sup> + (z<sub>b</sub> − z<sub>a</sub>)<sup>2</sup> =<br/>
+      = √(4 − 1)<sup>2</sup> + (5 − 2)<sup>2</sup> + (6 − 3)<sup>2</sup> =<br/>
+      = √3<sup>2</sup> + 3<sup>2</sup> + 3<sup>2</sup> = √9 + 9 + 9 =<br/>
+      = √27 = <span class="highlighted">5.196152422706632</span>
+    </div>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
