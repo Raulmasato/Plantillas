@@ -25,55 +25,84 @@
 
   <p>Dependiendo de la dimensión del problema de la distancia entre dos puntos se puede encontrar con la siguiente fórmula:</p>
 
-  <!-- CALCULATOR -->
+  <!-- CALCULADORA 2D -->
+  <h3 class="calc-title">2 dimensiones</h3>
   <div class="calc-wrapper">
     <div class="form-section">
-      <label>Elija la dimensionalidad necesaria:</label>
-      <label>Dimensionalidad:
-        <select id="dimSelect" onchange="onDimChange()">
-          <option value="2">2</option>
-          <option value="3">3</option>
-        </select>
-      </label>
-      <div class="coords-grid" style="margin-top:10px;">
-        <p style="margin-bottom:6px; font-size:13px;">Introduzca las coordenadas de puntos.</p>
+      <p class="coords-label">Introduzca las coordenadas de puntos.</p>
+      <div class="coords-grid">
         <div class="point-row">
           <span>A: (</span>
-          <input type="number" id="ax" value=""/>
+          <input type="number" id="ax2" placeholder="x"/>
           <span>,</span>
-          <input type="number" id="ay" value=""/>
-          <span id="az-wrap" style="display:none;">,<input type="number" id="az" value=""/></span>
+          <input type="number" id="ay2" placeholder="y"/>
           <span>)</span>
         </div>
         <div class="point-row">
           <span>B: (</span>
-          <input type="number" id="bx" value=""/>
+          <input type="number" id="bx2" placeholder="x"/>
           <span>,</span>
-          <input type="number" id="by" value=""/>
-          <span id="bz-wrap" style="display:none;">,<input type="number" id="bz" value=""/></span>
+          <input type="number" id="by2" placeholder="y"/>
           <span>)</span>
         </div>
       </div>
       <div class="btn-row">
-        <button onclick="calculate()">Calcular longitud del segmento AB</button>
+        <button onclick="calculate2D()">Calcular longitud del segmento AB</button>
       </div>
     </div>
-
     <div class="canvas-box">
-      <canvas id="segCanvas" width="160" height="120"></canvas>
+      <canvas id="canvas2D" width="160" height="120"></canvas>
     </div>
   </div>
-
-  <!-- ERROR -->
-  <div class="error-box" id="errorBox">
+  <div class="error-box" id="errorBox2D">
     <div class="error-title">Error en los datos ingresados:</div>
-    <ul id="errorList"></ul>
+    <ul id="errorList2D"></ul>
+  </div>
+  <div class="result-box" id="resultBox2D">
+    <div class="result-title">Resultado:</div>
+    <div class="result-value" id="resultValue2D"></div>
   </div>
 
-  <!-- RESULT -->
-  <div class="result-box" id="resultBox">
+  <!-- CALCULADORA 3D -->
+  <h3 class="calc-title" style="margin-top:30px;">3 dimensiones</h3>
+  <div class="calc-wrapper">
+    <div class="form-section">
+      <p class="coords-label">Introduzca las coordenadas de puntos.</p>
+      <div class="coords-grid">
+        <div class="point-row">
+          <span>A: (</span>
+          <input type="number" id="ax3" placeholder="x"/>
+          <span>,</span>
+          <input type="number" id="ay3" placeholder="y"/>
+          <span>,</span>
+          <input type="number" id="az3" placeholder="z"/>
+          <span>)</span>
+        </div>
+        <div class="point-row">
+          <span>B: (</span>
+          <input type="number" id="bx3" placeholder="x"/>
+          <span>,</span>
+          <input type="number" id="by3" placeholder="y"/>
+          <span>,</span>
+          <input type="number" id="bz3" placeholder="z"/>
+          <span>)</span>
+        </div>
+      </div>
+      <div class="btn-row">
+        <button onclick="calculate3D()">Calcular longitud del segmento AB</button>
+      </div>
+    </div>
+    <div class="canvas-box">
+      <canvas id="canvas3D" width="160" height="120"></canvas>
+    </div>
+  </div>
+  <div class="error-box" id="errorBox3D">
+    <div class="error-title">Error en los datos ingresados:</div>
+    <ul id="errorList3D"></ul>
+  </div>
+  <div class="result-box" id="resultBox3D">
     <div class="result-title">Resultado:</div>
-    <div class="result-value" id="resultValue"></div>
+    <div class="result-value" id="resultValue3D"></div>
   </div>
 
   <!-- FORMULAS -->

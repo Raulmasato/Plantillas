@@ -19,6 +19,17 @@ p {
 }
 
 /* ---- CALCULATOR BOX ---- */
+.calc-title {
+  font-size: 14px;
+  font-weight: bold;
+  margin-bottom: 8px;
+}
+
+.coords-label {
+  margin-bottom: 6px;
+  font-size: 13px;
+}
+
 .calc-wrapper {
   display: flex;
   align-items: center;

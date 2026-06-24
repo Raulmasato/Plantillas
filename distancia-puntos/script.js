@@ -1,40 +1,28 @@
-var IDS_2D = ['ax', 'ay', 'bx', 'by'];
-var IDS_3D = ['ax', 'ay', 'az', 'bx', 'by', 'bz'];
-
-function onDimChange() {
-  var dim = parseInt(document.getElementById('dimSelect').value);
-  var show3d = dim === 3;
-  document.getElementById('az-wrap').style.display = show3d ? 'inline' : 'none';
-  document.getElementById('bz-wrap').style.display = show3d ? 'inline' : 'none';
-  hideResult();
-  hideError();
-  clearErrors();
-  drawSegment();
-}
+var IDS_2D = ['ax2', 'ay2', 'bx2', 'by2'];
+var IDS_3D = ['ax3', 'ay3', 'az3', 'bx3', 'by3', 'bz3'];
 
 function getVal(id) {
   return document.getElementById(id).value.trim();
 }
 
-function validate() {
-  var dim = parseInt(document.getElementById('dimSelect').value);
-  var ids = dim === 3 ? IDS_3D : IDS_2D;
+function validate(ids) {
   var errors = [];
 
-  clearErrors();
-
   ids.forEach(function(id) {
+    var el = document.getElementById(id);
+    el.classList.remove('input-error');
+
     var raw = getVal(id);
 
     if (raw === '' || isNaN(Number(raw))) {
-      markError(id);
+      el.classList.add('input-error');
       errors.push('El campo <strong>' + id.toUpperCase() + '</strong> contiene un valor no numérico o está vacío.');
       return;
     }
 
     var num = parseFloat(raw);
     if (num <= 0) {
-      markError(id);
+      el.classList.add('input-error');
       errors.push('El campo <strong>' + id.toUpperCase() + '</strong> debe ser mayor a cero (valor ingresado: ' + num + ').');
     }
   });
@@ -42,66 +30,68 @@ function validate() {
   return errors;
 }
 
-function markError(id) {
-  document.getElementById(id).classList.add('input-error');
-}
-
-function clearErrors() {
-  var all = IDS_3D;
-  all.forEach(function(id) {
-    var el = document.getElementById(id);
-    if (el) el.classList.remove('input-error');
-  });
-}
-
-function showError(errors) {
-  var box = document.getElementById('errorBox');
-  var list = document.getElementById('errorList');
+function showError(boxId, listId, errors) {
+  var box = document.getElementById(boxId);
+  var list = document.getElementById(listId);
   list.innerHTML = errors.map(function(e) { return '<li>' + e + '</li>'; }).join('');
   box.style.display = 'block';
 }
 
-function hideError() {
-  document.getElementById('errorBox').style.display = 'none';
+function hideError(boxId) {
+  document.getElementById(boxId).style.display = 'none';
 }
 
-function hideResult() {
-  document.getElementById('resultBox').style.display = 'none';
+function showResult(boxId, valueId, dist) {
+  document.getElementById(valueId).textContent = dist;
+  document.getElementById(boxId).style.display = 'block';
 }
 
-function calculate() {
-  hideError();
-  hideResult();
+function hideResult(boxId) {
+  document.getElementById(boxId).style.display = 'none';
+}
 
-  var errors = validate();
+function calculate2D() {
+  hideError('errorBox2D');
+  hideResult('resultBox2D');
+
+  var errors = validate(IDS_2D);
   if (errors.length > 0) {
-    showError(errors);
+    showError('errorBox2D', 'errorList2D', errors);
     return;
   }
 
-  var dim = parseInt(document.getElementById('dimSelect').value);
-  var ax = parseFloat(getVal('ax'));
-  var ay = parseFloat(getVal('ay'));
-  var bx = parseFloat(getVal('bx'));
-  var by = parseFloat(getVal('by'));
+  var ax = parseFloat(getVal('ax2'));
+  var ay = parseFloat(getVal('ay2'));
+  var bx = parseFloat(getVal('bx2'));
+  var by = parseFloat(getVal('by2'));
 
-  var dist;
-  if (dim === 2) {
-    dist = Math.sqrt(Math.pow(bx - ax, 2) + Math.pow(by - ay, 2));
-  } else {
-    var az = parseFloat(getVal('az'));
-    var bz = parseFloat(getVal('bz'));
-    dist = Math.sqrt(Math.pow(bx - ax, 2) + Math.pow(by - ay, 2) + Math.pow(bz - az, 2));
-  }
-
-  document.getElementById('resultValue').textContent = dist;
-  document.getElementById('resultBox').style.display = 'block';
-
-  drawSegment();
+  var dist = Math.sqrt(Math.pow(bx - ax, 2) + Math.pow(by - ay, 2));
+  showResult('resultBox2D', 'resultValue2D', dist);
 }
 
-function drawSegment() {
-  var canvas = document.getElementById('segCanvas');
+function calculate3D() {
+  hideError('errorBox3D');
+  hideResult('resultBox3D');
+
+  var errors = validate(IDS_3D);
+  if (errors.length > 0) {
+    showError('errorBox3D', 'errorList3D', errors);
+    return;
+  }
+
+  var ax = parseFloat(getVal('ax3'));
+  var ay = parseFloat(getVal('ay3'));
+  var az = parseFloat(getVal('az3'));
+  var bx = parseFloat(getVal('bx3'));
+  var by = parseFloat(getVal('by3'));
+  var bz = parseFloat(getVal('bz3'));
+
+  var dist = Math.sqrt(Math.pow(bx - ax, 2) + Math.pow(by - ay, 2) + Math.pow(bz - az, 2));
+  showResult('resultBox3D', 'resultValue3D', dist);
+}
+
+function drawSegment(canvasId) {
+  var canvas = document.getElementById(canvasId);
   var ctx = canvas.getContext('2d');
   var W = canvas.width, H = canvas.height;
 
@@ -131,4 +121,5 @@ function drawSegment() {
   ctx.fillText('B', pbx - 18, pby + 4);
 }
 
-drawSegment();
+drawSegment('canvas2D');
+drawSegment('canvas3D');
