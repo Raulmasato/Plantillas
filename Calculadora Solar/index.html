@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Calculadora de Paneles Solares</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+
+  <header>
+    <div class="header-inner">
+      <span class="logo-icon">&#9728;</span>
+      <div>
+        <h1>Calculadora de Paneles Solares</h1>
+        <p class="subtitulo">Estimá la potencia y superficie necesaria para tu hogar</p>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <section class="intro-card">
+      <p>
+        Ya sea que busques reducir tu factura de electricidad o contribuir al cuidado del medioambiente,
+        esta calculadora te ayuda a determinar la superficie de paneles que mejor se adapta a tu hogar,
+        según el porcentaje de consumo eléctrico que quieras compensar.
+      </p>
+    </section>
+
+    <section class="calc-section">
+      <h2>¿Qué querés calcular?</h2>
+      <div class="opciones">
+        <label class="opcion-card">
+          <input type="radio" name="tipo" value="campo" />
+          <div class="opcion-inner">
+            <span class="opcion-icono">⚡</span>
+            <span>Tamaño del campo solar (kW)</span>
+          </div>
+        </label>
+        <label class="opcion-card">
+          <input type="radio" name="tipo" value="superficie" />
+          <div class="opcion-inner">
+            <span class="opcion-icono">🏠</span>
+            <span>Superficie de tejado necesaria (m²)</span>
+          </div>
+        </label>
+      </div>
+
+      <form id="formulario" novalidate>
+        <div id="campos-comunes" class="campos hidden">
+
+          <div class="form-group">
+            <label for="consumo">Consumo anual (kWh)</label>
+            <input type="number" id="consumo" placeholder="Ej: 1000" min="0" step="any" />
+            <span class="error-msg" id="err-consumo"></span>
+          </div>
+
+          <div class="form-group">
+            <label for="compensacion">Porcentaje de compensación (%)</label>
+            <input type="number" id="compensacion" placeholder="Ej: 90" min="0" max="100" step="any" />
+            <span class="error-msg" id="err-compensacion"></span>
+          </div>
+
+          <div class="form-group">
+            <label for="factor">Factor medioambiental (%)</label>
+            <input type="number" id="factor" placeholder="Ej: 85" min="0" max="100" step="any" />
+            <span class="error-msg" id="err-factor"></span>
+          </div>
+
+          <div class="form-group">
+            <label for="horas">Horas solares por día</label>
+            <input type="number" id="horas" placeholder="Ej: 8" min="0" max="24" step="any" />
+            <span class="error-msg" id="err-horas"></span>
+          </div>
+
+          <div id="campos-superficie" class="hidden">
+            <div class="form-group">
+              <label for="potencia-panel">Potencia por panel (kW)</label>
+              <input type="number" id="potencia-panel" placeholder="Ej: 0.3" min="0" step="any" />
+              <span class="error-msg" id="err-potencia-panel"></span>
+            </div>
+            <div class="form-group">
+              <label for="superficie-panel">Superficie por panel (m²)</label>
+              <input type="number" id="superficie-panel" placeholder="Ej: 1.4" min="0" step="any" />
+              <span class="error-msg" id="err-superficie-panel"></span>
+            </div>
+          </div>
+
+          <div class="botones">
+            <button type="submit" class="btn-calcular">Calcular</button>
+            <button type="button" class="btn-limpiar" id="btn-limpiar">Limpiar</button>
+          </div>
+        </div>
+      </form>
+
+      <div id="resultado" class="resultado hidden">
+        <h3>Resultado</h3>
+        <div id="resultado-texto"></div>
+      </div>
+
+    </section>
+  </main>
+
+  <footer>
+    <p>&copy; 2025 Calculadora Solar &mdash; Uso educativo</p>
+  </footer>
+
+  <script src="script.js"></script>
+</body>
+</html>
