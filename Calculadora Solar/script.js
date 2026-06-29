@@ -56,14 +56,15 @@ formulario.addEventListener('submit', (e) => {
 });
 
 btnLimpiar.addEventListener('click', () => {
-  formulario.reset();
+  document.getElementById('consumo').value = '';
+  document.getElementById('compensacion').value = '';
+  document.getElementById('factor').value = '';
+  document.getElementById('horas').value = '';
+  document.getElementById('potencia-panel').value = '';
+  document.getElementById('superficie-panel').value = '';
+
   resultado.classList.add('hidden');
   limpiarErrores();
-
-  radios.forEach(r => r.checked = false);
-  camposComunes.classList.add('hidden');
-  camposSuperficie.classList.add('hidden');
-  tipoCalculo = null;
 });
 
 function mostrarResultado(valor, descripcion) {
