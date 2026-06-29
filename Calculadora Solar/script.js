@@ -60,7 +60,6 @@ btnLimpiar.addEventListener('click', () => {
   resultado.classList.add('hidden');
   limpiarErrores();
 
-  // deseleccionar radios y ocultar el form
   radios.forEach(r => r.checked = false);
   camposComunes.classList.add('hidden');
   camposSuperficie.classList.add('hidden');
